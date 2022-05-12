@@ -18,7 +18,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "inFest.h"
-
+// 안녕뭐해
 
 void testing()
 {
