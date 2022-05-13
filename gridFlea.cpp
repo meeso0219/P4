@@ -131,13 +131,8 @@ void gridFlea::move(int p)
 
     if (checkFleaState((FLEA_STATUS)(STATE_PERMDEACTIVE | STATE_INACTIVE)))
     {
-
         if (!outSideJump)
         {
-            if (currentEnergy % 2 == 0)
-                moveX(p);
-            else
-                moveY(p);
             outSideJump = true;
         }
         else
@@ -146,20 +141,35 @@ void gridFlea::move(int p)
             return;
         }
     }
-
+    if ( outSideJump == true)
+        cout<< "outside Jump is true" << endl;
+    else if (outSideJump == false)
+        cout << "outide jump is false" << endl;
     if (!checkFleaState(STATE_ENERGERTIC))
         p = DEFAULT_MOVE;
 
     if (p > currentEnergy)
         p = currentEnergy;
+
     cout << "Move current p: " << p << endl;
 
+    z = SIZE/2;
+    cout << "z: " << z << endl;
+    if (outSideJump == true)
+    {
+        if (p + currentX > SIZE + z || p + currentY > SIZE + z)
+        {
+            cout << "gridFlea cannot jump more than " << z << "squares from boundary" << endl;
+            cout << "current location is " << currentX << currentY << endl;
+            return;
+        }
+
+    }
     if (currentEnergy % 2 == 0)
         moveX(p);
     else
         moveY(p);
 
-    cout << "CurrentEnergy -=" << endl;
     currentEnergy -= p;
     movedCount += p;
     cout << "current Energy: " << currentEnergy << endl;

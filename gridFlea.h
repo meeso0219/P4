@@ -154,8 +154,8 @@ private:
     int         currentY;
     int         currentEnergy;
     int         movedCount;
-    unsigned    lastChanceJump;
     bool        outSideJump; // false for not last jumped yet. true for last jumped
+    int         z; //
 
     // POST CONDITION: flea's move count and position is set to initial which is (0,0)
     void        resetPosition();

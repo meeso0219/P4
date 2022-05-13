@@ -48,18 +48,36 @@ void tmpTesting()
 
     for (int i = 0; i < 5; i++)
     {
-        inFestTmp[i] = inFest(i+1,i+5,i+300,5);
+        inFestTmp[i] = inFest(i+1,i+5,i+300,1);
     }
-    inFestTmp[0].move(10); // 0 번째는 initX1 initY 5 initEnergy 30 size 5
     inFestTmp[0].move(10);
+    cout << "moved 1" << endl;
+    cout << endl;
     inFestTmp[0].move(10);
+    cout << "moved 2" << endl;
+    cout << endl;
     inFestTmp[0].move(10);
+    cout << "moved 3" << endl;
+    cout << endl;
     inFestTmp[0].move(10);
+    cout << "moved 4" << endl;
+    cout << endl;
     inFestTmp[0].move(10);
+    cout << "moved 5" << endl;
+    cout << endl;
+    inFestTmp[0].move(30);
+    cout << "moved 6" << endl;
+    cout << endl;
 
     inFestTmp[0].move(10);
+    cout << "moved 7" << endl;
+    cout << endl;
     inFestTmp[0].move(10);
+    cout << "moved 8" << endl;
+    cout << endl;
     inFestTmp[0].move(10);
+    cout << "moved 9" << endl;
+    cout << endl;
 }
 
 void copyTesting()
