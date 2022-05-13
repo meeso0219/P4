@@ -1,10 +1,10 @@
 /*
 * Author: Changhyun Park
-* Date: 4/14/2022
+* Date: 5/19/2022
 *
 * CLASS INVARIANT:
 *                 - The constructor encapsulates some number of internally generated, distinct gridFlea objects.
-*                   It systematically generate different values for subobject gridFlea.
+*                   It systematically generates different values for subobject gridFlea.
 *
 *                 - inFest object revive all inactivated gridFleas when more than half of its gridFleas are deactivated.
 *

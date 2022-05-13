@@ -1,6 +1,6 @@
 /*
 * Author: Changhyun Park
-* Date: 4/5/2022
+* Date: 5/19/2022
 * Revision History: Added PRE/POST CONDITIONS and Invariants (4/4)
 *                   Added more about invariants (4/5)
 *                   Added Unit Testing (4/5)
@@ -46,7 +46,7 @@ gridFlea::gridFlea(int initX, int initY, int initEnergy)
     initialEnergy = initEnergy;
 
     resetPosition();
-    resetEngergy();
+    resetEnergy();
 }
 
 // POSTCONDITION: if client does not specify the initial values, x is 0 y is 0 and energy is 10
@@ -57,7 +57,7 @@ gridFlea::gridFlea()
     initialEnergy = DEFAULT_ENERGY;
 
     resetPosition();
-    resetEngergy();
+    resetEnergy();
 }
 
 gridFlea::gridFlea(const gridFlea* src)
@@ -83,7 +83,7 @@ void gridFlea::resetPosition()
 }
 
 // POST CONDITION: flea's energy is set to its initial energy
-void gridFlea::resetEngergy()
+void gridFlea::resetEnergy()
 {
     currentEnergy = initialEnergy;
 }
@@ -128,11 +128,24 @@ int gridFlea::getFleaState()
 //                  Flea must not be in invalid position to move
 void gridFlea::move(int p)
 {
-    cout << currentEnergy << endl;
-    if (checkFleaState((FLEA_STATUS)(STATE_PERMDEACTIVE | STATE_INACTIVE))){
-        return;
-    }
 
+    if (checkFleaState((FLEA_STATUS)(STATE_PERMDEACTIVE | STATE_INACTIVE)))
+    {
+
+        if (!outSideJump)
+        {
+            if (currentEnergy % 2 == 0)
+                moveX(p);
+            else
+                moveY(p);
+            outSideJump = true;
+        }
+        else
+        {
+            cout << "not moved" << endl;
+            return;
+        }
+    }
 
     if (!checkFleaState(STATE_ENERGERTIC))
         p = DEFAULT_MOVE;
@@ -143,12 +156,13 @@ void gridFlea::move(int p)
 
     if (currentEnergy % 2 == 0)
         moveX(p);
-
     else
         moveY(p);
 
+    cout << "CurrentEnergy -=" << endl;
     currentEnergy -= p;
     movedCount += p;
+    cout << "current Energy: " << currentEnergy << endl;
 
 }
 
@@ -156,12 +170,14 @@ void gridFlea::move(int p)
 void gridFlea::moveX(int p)
 {
     currentX += p;
+    cout << "current X: " << currentX << endl;
 }
 
 // POSTCONDITION: current y axis changes
 void gridFlea::moveY(int p)
 {
     currentY += p;
+    cout << "current Y: " << currentY << endl;
 }
 
 //��reward�� is reduced by the number of squares moved.
@@ -184,7 +200,7 @@ void gridFlea::reset()
         return;
 
     resetPosition();
-    resetEngergy();
+    resetEnergy();
 }
 
 
@@ -195,7 +211,7 @@ void gridFlea::revive()
     if (!isAlive()) return;
     if (!checkFleaState(STATE_PERMDEACTIVE)) return;
     //cout << "revived a flea" << endl;
-    resetEngergy();
+    resetEnergy();
 }
 
 // POSTCONDITION: return false if flea is permanently deactivated (which is dead)
@@ -236,7 +252,7 @@ int gridFlea::value()
   The flea is permanently deactivated if it goes out of range (0 to SIZE)
 - The flea can only move when it is active. The flea moves specified number of squares by client.
   But if the flea is not energetic, it moves only 1 square.
-- The flea will become unenergetic if its current energy is lower than ENERGETIC_BASE_POINT
+- The flea will become un-energetic if its current energy is lower than ENERGETIC_BASE_POINT
   and getFleaState() and getFleaState() will help to track flea's state.
 
 - MAX is defined to determine larger value
@@ -245,7 +261,7 @@ int gridFlea::value()
 
 - DEFAULT_SIZE is defined to set size of grid
 - DEFAULT_ENERGY is defined to default energy.
-- DEFAULT_MOVE is defined to movement when flea is unenergetic
+- DEFAULT_MOVE is defined to movement when flea is not energetic.
 - DEFAULT_REWARD is defined to set default reward
 - ENERGETIC_BASE_POINT is defined to represent minimum energy to be energetic.
 

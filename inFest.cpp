@@ -1,6 +1,6 @@
 /*
 * Author: Changhyun Park
-* Date: 4/14/2022
+* Date: 5/19/2022
 *
 * CLASS INVARIANT:
 *                 - The constructor encapsulates some number of internally generated, distinct gridFlea objects.
@@ -101,7 +101,6 @@ void inFest::move(int p)
     for (int i = 0; i < gridFleasSize; i++) {
         gridFleas[i]->move(p);
     }
-
 
     if (isMoreThanHalfDied())
         reviveAll();

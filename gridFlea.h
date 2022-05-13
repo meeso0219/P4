@@ -1,6 +1,6 @@
 /*
  Author: Changhyun Park
- Date: 4/14/2022
+ Date: 5/19/2022
  Revision History: Added PRE/POST CONDITIONS and Invariants (4/4)
                    Added more about invariants (4/5)
                    Added Unit Testing (4/5)
@@ -154,12 +154,14 @@ private:
     int         currentY;
     int         currentEnergy;
     int         movedCount;
+    unsigned    lastChanceJump;
+    bool        outSideJump; // false for not last jumped yet. true for last jumped
 
     // POST CONDITION: flea's move count and position is set to initial which is (0,0)
     void        resetPosition();
 
     // POST CONDITION: flea's energy is set to its initial energy
-    void        resetEngergy();
+    void        resetEnergy();
 
     // POSTCONDTION: return false if flea's position is out of the bound
 //               return true if flea is inside of the range
