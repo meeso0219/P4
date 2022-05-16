@@ -234,6 +234,7 @@ bool gridFlea::isAlive()
 const gridFlea& gridFlea::operator=(const gridFlea& src)
 {
 
+    cout << "deep copy" << endl;
     initialX = src.initialX;
     initialY = src.initialY;
     initialEnergy = src.initialEnergy;
@@ -253,6 +254,141 @@ int gridFlea::value()
 {
     return reward() * SIZE * change();
 }
+
+
+
+// + 연산은 객체두개 더한 새로운 객체 만들기
+gridFlea gridFlea::operator+(const gridFlea& g1)
+{
+    gridFlea local;
+    local.currentX =  this->currentX + g1.currentX;
+    local.currentY = this->currentY + g1.currentY;
+    local.currentEnergy =  this->currentEnergy + g1.currentEnergy;
+
+    return local;
+}
+
+// += 연산은 원래있던 객체에 값 더한거 += is destructive so the object is changed
+gridFlea&  gridFlea::operator+=(const gridFlea &rhs)
+{
+    currentX += rhs.currentX;
+    currentY += rhs.currentY;
+    currentEnergy += rhs.currentEnergy;
+
+    return *this;
+}
+
+gridFlea gridFlea::operator-(const gridFlea& rhs) const
+{
+    gridFlea local;
+    local.currentX =  this->currentX - rhs.currentX;
+    local.currentY =  this->currentY- rhs.currentY;
+    local.currentEnergy = this->currentEnergy - rhs.currentEnergy;
+    if (local.currentEnergy < 0)
+        local.currentEnergy = 0;
+
+    return local;
+}
+
+gridFlea&  gridFlea::operator-=(const gridFlea &rhs)
+{
+    currentX -= rhs.currentX;
+    currentY -= rhs.currentY;
+    currentEnergy -= rhs.currentEnergy;
+
+    return *this;
+}
+
+gridFlea gridFlea::operator+(const int &rhs) const
+{
+    gridFlea local;
+    local.currentX += rhs;
+    local.currentY += rhs;
+    local.currentEnergy += rhs;
+
+    return local;
+}
+
+gridFlea& gridFlea::operator+=(const int &rhs)
+{
+    currentX += rhs;
+    currentY += rhs;
+    currentEnergy += rhs;
+
+    return *this;
+}
+
+gridFlea gridFlea::operator-(const int &rhs) const
+{
+    gridFlea local;
+    local.currentX -= rhs;
+    local.currentY -= rhs;
+    local.currentEnergy -= rhs;
+    if (local.currentEnergy < 0)
+        local.currentEnergy = 0;
+
+    return local;
+}
+
+gridFlea& gridFlea::operator-=(const int &rhs)
+{
+    currentX -= rhs;
+    currentY -= rhs;
+    currentEnergy -= rhs;
+    if (currentEnergy < 0)
+        currentEnergy = 0;
+
+    return *this;
+}
+
+ bool gridFlea::operator==(gridFlea &rhs)
+{
+    if (this->value() == rhs.value())
+        return true;
+    else
+        return false;
+}
+
+bool gridFlea::operator!=(gridFlea &rhs)
+{
+    if (this->value() != rhs.value())
+        return true;
+    else
+        return false;
+}
+
+bool gridFlea::operator<(gridFlea &rhs)
+{
+    if (this->value() < rhs.value())
+        return true;
+    else
+        return false;
+}
+
+bool gridFlea::operator>(gridFlea &rhs)
+{
+    if (this->value() > rhs.value())
+        return true;
+    else
+        return false;
+}
+
+bool gridFlea::operator<=(gridFlea &rhs)
+{
+    if (this->value() <= rhs.value())
+        return true;
+    else
+        return false;
+}
+
+bool gridFlea::operator>=(gridFlea &rhs)
+{
+    if (this->value() >= rhs.value())
+        return true;
+    else
+        return false;
+}
+
 
 /* Implementation Invariant:
   1. Minimal details describe internal data structures and dependencies

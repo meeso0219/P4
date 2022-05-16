@@ -184,6 +184,7 @@ private:
     // POSTCONDITION: return calculated change value
     int         change();
 
+    friend class inFest;
 public:
     // PRECONDITION: the initial coordinates must be inside of the range
     // POSTCONDITION: set the flea's initial position and initial energy by parameters
@@ -214,5 +215,37 @@ public:
 
 
     const gridFlea& operator=(const gridFlea& src);
+
+    gridFlea operator+(const int &rhs) const; // just adding rhs.x to this.x, and rhs.y to this.y
+    gridFlea &operator+=(const int &rhs);
+
+    gridFlea operator-(const int &rhs) const;
+
+    gridFlea &operator-=(const int &rhs);
+
+    gridFlea operator+(const gridFlea &rhs) const;
+
+    gridFlea &operator+=(const gridFlea &rhs);
+
+    gridFlea operator-(const gridFlea &rhs) const;
+
+    gridFlea &operator-=(const gridFlea &rhs);
+
+
+    // 그냥 + 연산자는 새로운 객체 반환
+    // += 연산자는 원래있던 객체에 값 더한거.
+    gridFlea operator+(const gridFlea& g1);
+    bool operator==(gridFlea &rhs); // these comparison operators really should be const, but i update the state upon calling `getState()` so that's not really possible for me.
+
+    bool operator!=(gridFlea &rhs); // these compare `value()` of rhs and *this
+
+    bool operator<(gridFlea &rhs);
+
+    bool operator>(gridFlea &rhs);
+
+    bool operator<=(gridFlea &rhs);
+
+    bool operator>=(gridFlea &rhs);
+
 };
 #endif

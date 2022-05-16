@@ -89,5 +89,31 @@ public:
     // PRE CONDITION: flea must not died
     // POST CONDITION: inacitivated fleas are activated with their initial energy.
     void  reviveAll();
+
+    inFest operator+(const inFest &rhs) const; // appends GridFleas from rhs to *this
+
+    inFest &operator+=(const inFest &rhs);
+
+    inFest operator+(const gridFlea &rhs) const;
+
+    inFest &operator+=(const gridFlea &rhs);
+
+    inFest &operator++(); // prefix
+
+    inFest operator++(int x); // postfix
+
+    gridFlea const &operator[](size_t index) const;
+
+    bool operator==(const inFest &rhs) const; // compares (maxValue - minValue) of both
+
+    bool operator!=(const inFest &rhs) const;
+
+    bool operator<(const inFest &rhs) const;
+
+    bool operator>(const inFest &rhs) const;
+
+    bool operator<=(const inFest &rhs) const;
+
+    bool operator>=(const inFest &rhs) const;
 };
 #endif

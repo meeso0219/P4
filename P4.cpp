@@ -127,11 +127,85 @@ void copyTesting()
 int main(void)
 {
 
-    srand((unsigned int)time(NULL));
+    //srand((unsigned int)time(NULL));
 
-    tmpTesting();
+    //tmpTesting();
     //testing();
     //copyTesting();
+
+    gridFlea g1(4,0,50);
+    gridFlea g2(10,10,50);
+    cout << "g1 value: " << g1.value() << endl;
+
+
+    cout << "g3 = g1 + g2" << endl;
+    gridFlea g3 = g1 + g2;
+    g3.move(1);
+
+    cout << "g4 = g2 + g1" << endl;
+    gridFlea g4 = g2 + g1;
+    g4.move(1);
+
+    cout << "g4 += g3" << endl;
+    g4 += g3;
+    g4.move(1);
+    cout << endl;
+    g4.move(1);
+    cout << endl;
+
+    cout << "TEsting minus" << endl;
+    gridFlea g5 = g4-g2;
+    cout << "g5 value: " << g5.value() << endl;
+    g5.move(1);
+    cout << "g5 value: " << g5.value() << endl;
+    cout << endl;
+    g5.move(1);
+    cout << "g5 value: " << g5.value() << endl;
+
+    cout << endl;
+    g5.move(-1);
+    cout << "g5 value: " << g5.value() << endl;
+
+    cout << endl;
+    g5.move(-1);
+    cout << "g5 value: " << g5.value() << endl;
+
+    if(g4==g5)
+        cout<<"same" <<endl;
+    else
+        cout<<"not same" << endl;
+
+    gridFlea g6 = g4;
+    cout << "g6 value: " << g6.value() << endl;
+    cout << "g4 value: " << g4.value() << endl;
+    if(g4==g6)
+        cout<<"same" <<endl;
+    else
+        cout<<"not same" << endl;
+
+    cout << "g6 value: " << g6.value() << endl;
+
+    if(g6==g4)
+        cout<<"same" <<endl;
+    else
+        cout<<"not same" << endl;
+
+    g6.move(1);
+    if (g6 < g4)
+        cout << "g4 is larger" << endl;
+    else if (g6 > g4)
+        cout << "g6 is larger" << endl;
+
+    g4.move(2);
+    if (g6 < g4)
+        cout << "g4 is larger" << endl;
+    else if (g6 > g4)
+        cout << "g6 is larger" << endl;
+
+    if (g6 <= g4)
+        cout << "g4 is larger or g6 and g4 is same" << endl;
+    else if (g6 >= g4)
+        cout << "g6 is larger or g6 and 64 is same" << endl;
 
     return 0;
 }
