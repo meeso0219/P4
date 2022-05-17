@@ -214,7 +214,7 @@ public:
     bool isAlive();
 
 
-    const gridFlea& operator=(const gridFlea& src);
+    const gridFlea operator=(const gridFlea& src);
 
     gridFlea operator+(const int &rhs) const; // just adding rhs.x to this.x, and rhs.y to this.y
     gridFlea &operator+=(const int &rhs);

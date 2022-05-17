@@ -31,7 +31,7 @@
 // POSTCONDITION: set the flea's initial position and initial energy by parameters
 gridFlea::gridFlea(int initX, int initY, int initEnergy)
 {
-
+    cout << "벼룩생성자" << endl;
     if (initX < 0 || initX > SIZE)
         initX = 0;
 
@@ -231,7 +231,7 @@ bool gridFlea::isAlive()
 }
 
 
-const gridFlea& gridFlea::operator=(const gridFlea& src)
+const gridFlea gridFlea::operator=(const gridFlea& src)
 {
 
     cout << "deep copy" << endl;
@@ -341,7 +341,7 @@ gridFlea& gridFlea::operator-=(const int &rhs)
     return *this;
 }
 
- bool gridFlea::operator==(gridFlea &rhs)
+bool gridFlea::operator==(gridFlea &rhs)
 {
     if (this->value() == rhs.value())
         return true;

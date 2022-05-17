@@ -17,6 +17,12 @@
 #include <cstdlib>
 #include <ctime>
 #include "inFest.h"
+#include <memory>
+#include <vector>
+
+
+
+
 
 void testing()
 {
@@ -44,94 +50,47 @@ void testing()
 void tmpTesting()
 {
     cout << "This is TMP testing" << endl;
-    inFest inFestTmp[5];
 
+    unique_ptr<inFest> inFestTmp[5];
     for (int i = 0; i < 5; i++)
     {
-        inFestTmp[i] = inFest(i+1,i+5,i+300,1);
+        inFestTmp[i] = make_unique<inFest>(i+1,i+5,i+300,1);
     }
-    inFestTmp[0].move(10);
+    cout << "b4 move" << endl;
+    inFestTmp[0]->move(10);
     cout << "moved 1" << endl;
     cout << endl;
-    inFestTmp[0].move(10);
+    inFestTmp[0]->move(10);
     cout << "moved 2" << endl;
     cout << endl;
-    inFestTmp[0].move(10);
+    inFestTmp[0]->move(10);
     cout << "moved 3" << endl;
     cout << endl;
-    inFestTmp[0].move(10);
+    inFestTmp[0]->move(10);
     cout << "moved 4" << endl;
     cout << endl;
-    inFestTmp[0].move(10);
+    inFestTmp[0]->move(10);
     cout << "moved 5" << endl;
     cout << endl;
-    inFestTmp[0].move(30);
+    inFestTmp[0]->move(30);
     cout << "moved 6" << endl;
     cout << endl;
 
-    inFestTmp[0].move(10);
+    inFestTmp[0]->move(10);
     cout << "moved 7" << endl;
     cout << endl;
-    inFestTmp[0].move(10);
+    inFestTmp[0]->move(10);
     cout << "moved 8" << endl;
     cout << endl;
-    inFestTmp[0].move(10);
+    inFestTmp[0]->move(10);
     cout << "moved 9" << endl;
     cout << endl;
 }
 
-void copyTesting()
+
+
+void fleaOperatorTesting()
 {
-
-    inFest Obj2 = inFest(0, 0, 20, 3);
-    inFest Obj3 = inFest(5, 5, 20, 3);
-
-    cout << "initial values" << endl;
-    cout << endl;
-
-    cout << "obj2 min " << Obj2.value(VALUE_MINIMUM) << endl;
-    cout << "obj2 max " << Obj2.value(VALUE_MAXIMUM) << endl;
-    cout << "obj3 min " << Obj3.value(VALUE_MINIMUM) << endl;
-    cout << "obj3 max " << Obj3.value(VALUE_MAXIMUM) << endl;
-    cout << endl;
-
-    cout << "Obj3 moved" << endl;
-    Obj3.move(1);
-    cout << endl;
-    cout << "obj2 min " << Obj2.value(VALUE_MINIMUM) << endl;
-    cout << "obj2 max " << Obj2.value(VALUE_MAXIMUM) << endl;
-    cout << "obj3 min " << Obj3.value(VALUE_MINIMUM) << endl;
-    cout << "obj3 max " << Obj3.value(VALUE_MAXIMUM) << endl;
-    cout << endl;
-
-    cout << "Obj2 = Obj3 happened here" << endl;
-    Obj2 = Obj3;
-
-    cout << "obj2 min " << Obj2.value(VALUE_MINIMUM) << endl;
-    cout << "obj2 max " << Obj2.value(VALUE_MAXIMUM) << endl;
-    cout << "obj3 min " << Obj3.value(VALUE_MINIMUM) << endl;
-    cout << "obj3 max " << Obj3.value(VALUE_MAXIMUM) << endl;
-    cout << endl;
-
-    cout << endl;
-    cout << "Obj3 moved" << endl;
-    Obj3.move(23);
-    cout << endl;
-    cout << "obj2 min " << Obj2.value(VALUE_MINIMUM) << endl;
-    cout << "obj2 max " << Obj2.value(VALUE_MAXIMUM) << endl;
-    cout << "obj3 min " << Obj3.value(VALUE_MINIMUM) << endl;
-    cout << "obj3 max " << Obj3.value(VALUE_MAXIMUM) << endl;
-
-}
-
-int main(void)
-{
-
-    //srand((unsigned int)time(NULL));
-
-    //tmpTesting();
-    //testing();
-    //copyTesting();
 
     gridFlea g1(4,0,50);
     gridFlea g2(10,10,50);
@@ -207,11 +166,112 @@ int main(void)
     else if (g6 >= g4)
         cout << "g6 is larger or g6 and 64 is same" << endl;
 
-    return 0;
 }
 
+void smartptrTest()
+{
+    unique_ptr<inFest> inFest1 = make_unique<inFest>(0,0,20,2);
+
+    inFest1->move(1);
+    cout << endl;
+    cout << inFest1->value(VALUE_MAXIMUM) << endl;
+}
+
+void copyTesting()
+{
+
+    inFest Obj2 = inFest(0, 0, 20, 3);
+    inFest Obj3 = inFest(5, 5, 20, 3);
+    Obj2 = Obj3;
+
+
+    cout << "initial values" << endl;
+    cout << endl;
+
+    cout << "obj2 min " << Obj2.value(VALUE_MINIMUM) << endl;
+    cout << "obj2 max " << Obj2.value(VALUE_MAXIMUM) << endl;
+    cout << "obj3 min " << Obj3.value(VALUE_MINIMUM) << endl;
+    cout << "obj3 max " << Obj3.value(VALUE_MAXIMUM) << endl;
+    cout << endl;
+
+    cout << "Obj3 moved" << endl;
+    Obj3.move(1);
+    cout << endl;
+    cout << "obj2 min " << Obj2.value(VALUE_MINIMUM) << endl;
+    cout << "obj2 max " << Obj2.value(VALUE_MAXIMUM) << endl;
+    cout << "obj3 min " << Obj3.value(VALUE_MINIMUM) << endl;
+    cout << "obj3 max " << Obj3.value(VALUE_MAXIMUM) << endl;
+    cout << endl;
+
+    cout << "Obj2 = Obj3 happened here" << endl;
+    Obj2 = Obj3;
+
+    cout << "obj2 min " << Obj2.value(VALUE_MINIMUM) << endl;
+    cout << "obj2 max " << Obj2.value(VALUE_MAXIMUM) << endl;
+    cout << "obj3 min " << Obj3.value(VALUE_MINIMUM) << endl;
+    cout << "obj3 max " << Obj3.value(VALUE_MAXIMUM) << endl;
+    cout << endl;
+
+    cout << endl;
+    cout << "Obj3 moved" << endl;
+    Obj3.move(23);
+    cout << endl;
+    cout << "obj2 min " << Obj2.value(VALUE_MINIMUM) << endl;
+    cout << "obj2 max " << Obj2.value(VALUE_MAXIMUM) << endl;
+    cout << "obj3 min " << Obj3.value(VALUE_MINIMUM) << endl;
+    cout << "obj3 max " << Obj3.value(VALUE_MAXIMUM) << endl;
+
+}
+
+void testInfestComparision()
+{
+    unique_ptr<inFest> inFest1 = make_unique<inFest>(0,0,20,2);
+    unique_ptr<inFest> inFest2 = make_unique<inFest>(1,1,50,3);
+    inFest1->move(1);
+    cout << endl;
+    cout << inFest1->value(VALUE_MAXIMUM) << endl;
+    cout << inFest1->value(VALUE_MINIMUM) << endl;
+    inFest2->move(1);
+    cout << inFest2->value(VALUE_MAXIMUM) << endl;
+    cout << inFest2->value(VALUE_MINIMUM) << endl;
+
+    if (*inFest1==*inFest2)
+        cout << "They are the same" << endl;
+    else
+        cout << "They are not the same" << endl;
+
+    // inFest2->move(1);
+    //cout << inFest2->value(VALUE_MAXIMUM) << endl;
+
+    if (*inFest1==*inFest2)
+        cout << "They are the same" << endl;
+    else
+        cout << "They are not the same" << endl;
+}
+
+void testinFestaddition()
+{
+    unique_ptr<inFest> inFest1 = make_unique<inFest>(0,0,20,2);
+    unique_ptr<inFest> inFest2 = make_unique<inFest>(1,1,50,3);
+
+    unique_ptr<inFest> inFest3 = make_unique<inFest>(*inFest1 + *inFest2);
+
+}
+
+int main(void)
+{
+
+    //srand((unsigned int)time(NULL));
+
+    tmpTesting();
+    //testing();
+    //copyTesting();
+    //smartptrTest();
+    //testinFestaddition();
+    // testInfestComparision();
+    cout << "AA" << endl;
 
 
 
-
-
+    return 0;
+}

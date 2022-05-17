@@ -73,8 +73,11 @@ public:
     // PRECONDITION: client must specify four parameters.
     // POSTCONDITION: infest object get some number of distinct gridFlea objects
     inFest(int initX, int initY, int initEnergy, int size);
-
     const inFest& operator=(const inFest& src);
+
+
+    inFest& operator=(inFest &&src);
+    inFest(inFest&& src);
 
     ~inFest();
 
@@ -90,11 +93,12 @@ public:
     // POST CONDITION: inacitivated fleas are activated with their initial energy.
     void  reviveAll();
 
-    inFest operator+(const inFest &rhs) const; // appends GridFleas from rhs to *this
+
+    inFest operator+(const inFest &rhs); // appends GridFleas from rhs to *this
 
     inFest &operator+=(const inFest &rhs);
 
-    inFest operator+(const gridFlea &rhs) const;
+    inFest operator+(const gridFlea &rhs);
 
     inFest &operator+=(const gridFlea &rhs);
 
@@ -102,18 +106,17 @@ public:
 
     inFest operator++(int x); // postfix
 
-    gridFlea const &operator[](size_t index) const;
 
-    bool operator==(const inFest &rhs) const; // compares (maxValue - minValue) of both
+    bool operator==(inFest &rhs); // compares (maxValue - minValue) of both
 
-    bool operator!=(const inFest &rhs) const;
+    bool operator!=(inFest &rhs);
 
-    bool operator<(const inFest &rhs) const;
+    bool operator<(inFest &rhs);
 
-    bool operator>(const inFest &rhs) const;
+    bool operator>(inFest &rhs);
 
-    bool operator<=(const inFest &rhs) const;
+    bool operator<=(inFest &rhs);
 
-    bool operator>=(const inFest &rhs) const;
+    bool operator>=(inFest &rhs);
 };
 #endif
