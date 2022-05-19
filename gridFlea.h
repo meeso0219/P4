@@ -223,7 +223,8 @@ public:
 
     gridFlea &operator-=(const int &rhs);
 
-    gridFlea operator+(const gridFlea &rhs) const;
+    gridFlea operator++(int);
+    gridFlea& operator++();
 
     gridFlea &operator+=(const gridFlea &rhs);
 

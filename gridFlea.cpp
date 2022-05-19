@@ -31,7 +31,7 @@
 // POSTCONDITION: set the flea's initial position and initial energy by parameters
 gridFlea::gridFlea(int initX, int initY, int initEnergy)
 {
-    cout << "벼룩생성자" << endl;
+    //cout << "벼룩생성자" << endl;
     if (initX < 0 || initX > SIZE)
         initX = 0;
 
@@ -137,30 +137,27 @@ void gridFlea::move(int p)
         }
         else
         {
-            cout << "not moved" << endl;
+            //cout << "not moved" << endl;
             return;
         }
     }
-    if ( outSideJump == true)
-        cout<< "outside Jump is true" << endl;
-    else if (outSideJump == false)
-        cout << "outide jump is false" << endl;
+
     if (!checkFleaState(STATE_ENERGERTIC))
         p = DEFAULT_MOVE;
 
     if (p > currentEnergy)
         p = currentEnergy;
 
-    cout << "Move current p: " << p << endl;
+    //cout << "Move current p: " << p << endl;
 
     z = SIZE/2;
-    cout << "z: " << z << endl;
+    //cout << "z: " << z << endl;
     if (outSideJump == true)
     {
         if (p + currentX > SIZE + z || p + currentY > SIZE + z)
         {
-            cout << "gridFlea cannot jump more than " << z << "squares from boundary" << endl;
-            cout << "current location is " << currentX << currentY << endl;
+            //cout << "gridFlea cannot jump more than " << z << "squares from boundary" << endl;
+            // cout << "current location is " << currentX << currentY << endl;
             return;
         }
 
@@ -172,7 +169,7 @@ void gridFlea::move(int p)
 
     currentEnergy -= p;
     movedCount += p;
-    cout << "current Energy: " << currentEnergy << endl;
+    //cout << "current Energy: " << currentEnergy << endl;
 
 }
 
@@ -180,14 +177,14 @@ void gridFlea::move(int p)
 void gridFlea::moveX(int p)
 {
     currentX += p;
-    cout << "current X: " << currentX << endl;
+    // cout << "current X: " << currentX << endl;
 }
 
 // POSTCONDITION: current y axis changes
 void gridFlea::moveY(int p)
 {
     currentY += p;
-    cout << "current Y: " << currentY << endl;
+    //cout << "current Y: " << currentY << endl;
 }
 
 //��reward�� is reduced by the number of squares moved.
@@ -234,7 +231,7 @@ bool gridFlea::isAlive()
 const gridFlea gridFlea::operator=(const gridFlea& src)
 {
 
-    cout << "deep copy" << endl;
+    //cout << "deep copy" << endl;
     initialX = src.initialX;
     initialY = src.initialY;
     initialEnergy = src.initialEnergy;
@@ -308,6 +305,29 @@ gridFlea gridFlea::operator+(const int &rhs) const
 
     return local;
 }
+
+// prefix
+gridFlea& gridFlea::operator++()
+{
+    currentX += 1;
+    currentY += 1;
+    currentEnergy += 1;
+
+    return *this;
+}
+
+// postfix
+gridFlea gridFlea::operator++(int)
+{
+    gridFlea local(currentX,currentY,currentEnergy);
+    currentX += 1;
+    currentY += 1;
+    currentEnergy += 1;
+
+    return local;
+}
+
+
 
 gridFlea& gridFlea::operator+=(const int &rhs)
 {

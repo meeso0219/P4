@@ -102,11 +102,6 @@ public:
 
     inFest &operator+=(const gridFlea &rhs);
 
-    inFest &operator++(); // prefix
-
-    inFest operator++(int x); // postfix
-
-
     bool operator==(inFest &rhs); // compares (maxValue - minValue) of both
 
     bool operator!=(inFest &rhs);

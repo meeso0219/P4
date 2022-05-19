@@ -23,7 +23,7 @@ inFest::inFest()
 // POSTCONDITION: infest object get some number of distinct gridFlea objects
 inFest::inFest(int initX, int initY, int initEnergy, int size)
 {
-    cout << " infest constructor" << endl;
+    //cout << " infest constructor" << endl;
     gridFleasSize = size - 1;
 
     if (gridFleasSize <= 0) // if size is smaller than 0 or equal to 0, set to 1
@@ -39,7 +39,7 @@ inFest::inFest(int initX, int initY, int initEnergy, int size)
 // copy constructor
 inFest::inFest(const inFest& src)
 {
-    cout << "copy constructor" << endl;
+    //cout << "copy constructor" << endl;
     this->gridFleasSize = src.gridFleasSize;
     this->gridFleas = new gridFlea * [gridFleasSize];
 
@@ -52,12 +52,12 @@ inFest::inFest(const inFest& src)
 // copy assignment
 const inFest& inFest::operator=(const inFest& src)
 {
-    cout << "copy assignment" << endl;
+    //cout << "copy assignment" << endl;
     // check self assignment
     if (&src == this)
         return *this;
 
-    cout << "inFest copy assignment delete part" << endl;
+    //cout << "inFest copy assignment delete part" << endl;
     // delete part
     if (this->gridFleasSize != 0) {
         for (int i = 0; i < gridFleasSize; i++)
@@ -81,34 +81,34 @@ const inFest& inFest::operator=(const inFest& src)
 //move constructor
 inFest::inFest(inFest &&src)
 {
-    cout << "move constructor" << endl;
+    //cout << "move constructor" << endl;
     gridFleasSize = src.gridFleasSize;
     gridFleas = src.gridFleas;
 
     src.gridFleasSize = 0;
     src.gridFleas = nullptr;
-    cout << "move constructor ended" << endl;
+    //cout << "move constructor ended" << endl;
 }
 
 
 // move assignment
 inFest &inFest::operator=(inFest &&src)
 {
-    cout << "move assignment" << endl;
+    //cout << "move assignment" << endl;
     // self assignment detection
     if (this == &src)
         return *this;
 
     swap(gridFleasSize,src.gridFleasSize);
     swap(gridFleas,src.gridFleas);
-    cout << "move assignment swapped" << endl;
+    //cout << "move assignment swapped" << endl;
     return *this;
 }
 
 // destructor
 inFest::~inFest()
 {
-    cout << "inFest destructor called" << endl;
+    //cout << "inFest destructor called" << endl;
     for (int i = 0; i < gridFleasSize; i++)
         delete[] * (gridFleas + i);
     delete[] gridFleas;
@@ -179,16 +179,13 @@ inFest inFest::operator+(const inFest &rhs)
 
     inFest newObj = inFest(0,0,0,num);
 
-
     for (int i = 0; i < this->gridFleasSize; i++)
     {
         newObj.gridFleas[i] = this->gridFleas[i];
         index++;
     }
-
     for (int k = index; k < num; k++)
         newObj.gridFleas[k] = rhs.gridFleas[k];
-
 
     return newObj;
 }

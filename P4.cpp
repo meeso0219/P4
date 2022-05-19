@@ -47,6 +47,182 @@ void testing()
     }
 }
 
+// TODO: FIX
+void testCopyConstructor(inFest& mainGrid)
+{
+    cout << "Testing Copy Constructor" << endl;
+    shared_ptr<inFest> r1 (new inFest(mainGrid));
+    r1->move(2);
+    inFest* r2 = new inFest(*r1);
+    cout << "r1 maximum value: " << r1->value(VALUE_MAXIMUM) << endl;
+    cout << "r2 maximum value: " << r2->value(VALUE_MAXIMUM) << endl;
+}
+
+void testAssignmentOperator()
+{
+    cout << "Testing Overloaded Assignment Operator" << endl;
+    shared_ptr<inFest> r1 = make_shared<inFest>(0,0,50,3);
+    r1->move(1);
+    shared_ptr<inFest> r2 (r1);
+    cout << "r1 maximum value: " << r1->value(VALUE_MAXIMUM) << endl;
+    cout << "r2 maximum value: " << r2->value(VALUE_MAXIMUM) << endl;
+}
+
+void testLessThanOperator()
+{
+    cout << "Testing < Operator" << endl;
+    unique_ptr<inFest> inFest1 = make_unique<inFest>(0,0,50,3); // since c++14
+    inFest1->move(10);
+    unique_ptr<inFest> inFest2 = make_unique<inFest>(0,0,50,3); // since c++14
+
+    cout << "inFest1 < inFest2, expected: " << (inFest1->value(VALUE_MAXIMUM) < inFest2->value(VALUE_MAXIMUM))
+         << ", actual: " << (*inFest1 < *inFest2) << endl;
+
+    unique_ptr<gridFlea> flea1 = make_unique<gridFlea>(0,0,50); // since c++14
+    flea1->move(10);
+    unique_ptr<gridFlea> flea2 = make_unique<gridFlea>(0,0,50); // since c++14
+
+    cout << "flea1 < flea2, expected: " << (flea1->value() < flea2->value())
+         << ", actual: " << (*flea1 < *flea2) << endl;
+}
+
+void testGreaterThanOperator()
+{
+    cout << "Testing > Operator" << endl;
+    unique_ptr<inFest> inFest1 = make_unique<inFest>(0,0,50,3); // since c++14
+    inFest1->move(10);
+    unique_ptr<inFest> inFest2 = make_unique<inFest>(0,0,50,3); // since c++14
+
+    cout << "inFest1 > inFest2, expected: " << (inFest1->value(VALUE_MAXIMUM) > inFest2->value(VALUE_MAXIMUM))
+         << ", actual: " << (*inFest1 > *inFest2) << endl;
+
+    unique_ptr<gridFlea> flea1 = make_unique<gridFlea>(0,0,50); // since c++14
+    flea1->move(10);
+    unique_ptr<gridFlea> flea2 = make_unique<gridFlea>(0,0,50); // since c++14
+
+    cout << "flea1 > flea2, expected: " << (flea1->value() > flea2->value())
+         << ", actual: " << (*flea1 > *flea2) << endl;
+}
+
+void testGreaterThanOrEqualToOperator()
+{
+    cout << "Testing >= Operator" << endl;
+
+    unique_ptr<inFest> inFest1 = make_unique<inFest>(0,0,50,3); // since c++14
+    inFest1->move(10);
+    unique_ptr<inFest> inFest2 = make_unique<inFest>(0,0,50,3); // since c++14
+
+    cout << "inFest1 >= inFest2, expected: " << (inFest1->value(VALUE_MAXIMUM) >= inFest2->value(VALUE_MAXIMUM))
+         << ", actual: " << (*inFest1 >= *inFest2) << endl;
+
+    unique_ptr<gridFlea> flea1 = make_unique<gridFlea>(0,0,50); // since c++14
+    flea1->move(10);
+    unique_ptr<gridFlea> flea2 = make_unique<gridFlea>(0,0,50); // since c++14
+
+    cout << "flea1 >= flea2, expected: " << (flea1->value() >= flea2->value())
+         << ", actual: " << (*flea1 >= *flea2) << endl;
+}
+
+void testLessThanOrEqualToOperator()
+{
+    cout << "Testing <= Operator" << endl;
+    unique_ptr<inFest> inFest1 = make_unique<inFest>(0,0,50,3); // since c++14
+    inFest1->move(10);
+    unique_ptr<inFest> inFest2 = make_unique<inFest>(0,0,50,3); // since c++14
+
+    cout << "inFest1 <= inFest2, expected: " << (inFest1->value(VALUE_MAXIMUM) <= inFest2->value(VALUE_MAXIMUM))
+         << ", actual: " << (*inFest1 <= *inFest2) << endl;
+
+    unique_ptr<gridFlea> flea1 = make_unique<gridFlea>(0,0,50); // since c++14
+    flea1->move(10);
+    unique_ptr<gridFlea> flea2 = make_unique<gridFlea>(0,0,50); // since c++14
+
+    cout << "flea1 <= flea2, expected: " << (flea1->value() <= flea2->value())
+         << ", actual: " << (*flea1 <= *flea2) << endl;
+}
+
+void testEqualEqualOperator()
+{
+    cout << "Testing == Operator" << endl;
+    unique_ptr<inFest> inFest1 = make_unique<inFest>(0,0,50,3); // since c++14
+    inFest1->move(10);
+    unique_ptr<inFest> inFest2 = make_unique<inFest>(0,0,50,3); // since c++14
+    inFest2->move(10);
+
+    cout << "inFest1 == inFest2, expected: " << (inFest1->value(VALUE_MAXIMUM) == inFest2->value(VALUE_MAXIMUM))
+         << ", actual: " << (*inFest1 == *inFest2) << endl;
+
+    unique_ptr<gridFlea> flea1 = make_unique<gridFlea>(0,0,50); // since c++14
+    flea1->move(10);
+    unique_ptr<gridFlea> flea2 = make_unique<gridFlea>(0,0,50); // since c++14
+
+    cout << "flea1 == flea2, expected: " << (flea1->value() == flea2->value())
+         << ", actual: " << (*flea1 == *flea2) << endl;
+}
+
+void testNotEqualOperator()
+{
+    cout << "Testing != Operator" << endl;
+    unique_ptr<inFest> inFest1 = make_unique<inFest>(0,0,50,3); // since c++14
+    inFest1->move(10);
+    unique_ptr<inFest> inFest2 = make_unique<inFest>(0,0,50,3); // since c++14
+    inFest2->move(20);
+
+    cout << "inFest1 != inFest2, expected: " << (inFest1->value(VALUE_MAXIMUM) != inFest2->value(VALUE_MAXIMUM))
+         << ", actual: " << (*inFest1 != *inFest2) << endl;
+
+    unique_ptr<gridFlea> flea1 = make_unique<gridFlea>(0,0,50); // since c++14
+    flea1->move(10);
+    unique_ptr<gridFlea> flea2 = make_unique<gridFlea>(0,0,50); // since c++14
+    flea2->move(20);
+
+    cout << "flea1 != flea2, expected: " << (flea1->value() != flea2->value())
+         << ", actual: " << (*flea1 != *flea2) << endl;
+}
+
+void testObjectAddObject()
+{
+    cout << "Testing Object + Object" << endl;
+    unique_ptr<gridFlea> flea1 = make_unique<gridFlea>(0,0,50); // since c++14
+    flea1->move(10);
+
+    unique_ptr<gridFlea> flea2 = make_unique<gridFlea>(0,0,50); // since c++14
+    flea2->move(20);
+
+    unique_ptr<gridFlea> flea3 = make_unique<gridFlea>(*flea1 + *flea2);
+}
+
+void testObjectAddObjectShortCut()
+{
+    cout << "Testing Object += Object" << endl;
+    unique_ptr<gridFlea> flea1 = make_unique<gridFlea>(0,0,50); // since c++14
+    flea1->move(10);
+
+    unique_ptr<gridFlea> flea2 = make_unique<gridFlea>(0,0,50); // since c++14
+    flea2->move(20);
+
+    *flea1 += *flea2;
+
+    flea1->move(3);
+}
+
+/*
+void testHeterogeneous(grid& mainGrid)
+{
+    vector<inFest*> heterogeneous;
+
+    heterogeneous.push_back(new inFest(mainGrid));
+    heterogeneous.push_back(new gridFlea(mainGrid));
+
+    for (robot* oneRobot: heterogeneous){
+        oneRobot->move();
+        cout << typeid(*oneRobot).name() << endl;
+        cout << "countMoves: " << oneRobot->getCountMoves() << endl;
+    }
+
+}
+ */
+
 void tmpTesting()
 {
     cout << "This is TMP testing" << endl;
@@ -258,18 +434,33 @@ void testinFestaddition()
 
 }
 
+// TODO: Test with RNG, DOCUMENTATION, inFest mix type operator
 int main(void)
 {
 
-    //srand((unsigned int)time(NULL));
 
-    tmpTesting();
+    //srand((unsigned int)time(NULL));
+    testAssignmentOperator();
+    cout << " ************************************************* " << endl;
+    testLessThanOperator();
+    cout << " ************************************************* " << endl;
+    testGreaterThanOperator();
+    cout << " ************************************************* " << endl;
+    testGreaterThanOrEqualToOperator();
+    cout << " ************************************************* " << endl;
+    testLessThanOrEqualToOperator();
+    cout << " ************************************************* " << endl;
+    testEqualEqualOperator();
+    cout << " ************************************************* " << endl;
+    testNotEqualOperator();
+    cout << " ************************************************* " << endl;
+    //tmpTesting();
     //testing();
     //copyTesting();
     //smartptrTest();
     //testinFestaddition();
     // testInfestComparision();
-    cout << "AA" << endl;
+
 
 
 
