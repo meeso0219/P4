@@ -24,16 +24,16 @@ inFest::inFest()
 inFest::inFest(int initX, int initY, int initEnergy, int size)
 {
     //cout << " infest constructor" << endl;
-    gridFleasSize = size - 1;
+    //gridFleasSize = size - 1;
 
     if (gridFleasSize <= 0) // if size is smaller than 0 or equal to 0, set to 1
         gridFleasSize = 1;
 
     gridFleas = new gridFlea * [gridFleasSize];
 
-    for (int i = 0; i < gridFleasSize; i++) {
+    for (int i = 0; i < gridFleasSize; i++)
         gridFleas[i] = new gridFlea(initX + i, initY + i, initEnergy + i);
-    }
+
 }
 
 // copy constructor
@@ -118,7 +118,7 @@ inFest::~inFest()
 // POSTCONDITION: return true if more than half died
 bool inFest::isMoreThanHalfDied()
 {
-    int AliveFleaCount = 0;
+    //int AliveFleaCount = 0;
     for (int i = 0; i < gridFleasSize; i++)
     {
         if (gridFleas[i]->isAlive())
@@ -171,7 +171,14 @@ int inFest::value(VALUE_TYPE type)
     }
 }
 
-
+uint inFest::getNumOfAliveFlea()
+{
+    return AliveFleaCount;
+}
+uint inFest::getNumOfFlea()
+{
+    return gridFleasSize;
+}
 inFest inFest::operator+(const inFest &rhs)
 {
     int index;
@@ -196,21 +203,26 @@ inFest& inFest::operator+=(const inFest &rhs)
 
     return *this;
 }
-/*
-inFest inFest::operator+(const gridFlea &rhs)
+
+inFest inFest::operator+(gridFlea *rhs)
 {
+    /*
     inFest newObj = inFest(0,0,0,this->gridFleasSize+1);
 
     for (int i = 0; i < this->gridFleasSize; i++)
         newObj.gridFleas[i] = this->gridFleas[i];
 
     newObj.gridFleas[gridFleasSize] = (gridFlea *) rhs;
+    */
+    gridFlea** tempGridFleas;
+    tempGridFleas = new gridFlea * [gridFleasSize+1];
 
+    copy(gridFleas,gridFleas + min(gridFleasSize,gridFleasSize+1), tempGridFleas);
+    tempGridFleas[gridFleasSize+1] = (gridFlea *) rhs;
 
-
-    return newObj;
+    return reinterpret_cast<inFest &&>(tempGridFleas);
 }
-*/
+
 
 
 // compare values
@@ -224,8 +236,7 @@ bool inFest:: operator!=(inFest &rhs)
     return value(VALUE_MAXIMUM) != rhs.value(VALUE_MAXIMUM);
 }
 
-bool inFest:: operator<(inFest &rhs)
-{
+bool inFest:: operator<(inFest &rhs){
     return value(VALUE_MAXIMUM) < rhs.value(VALUE_MAXIMUM);
 }
 

@@ -409,6 +409,11 @@ bool gridFlea::operator>=(gridFlea &rhs)
         return false;
 }
 
+void gridFlea::printInfo()
+{
+    cout << "current x: " << currentX << "  current y: " << currentY
+    << "  current Energy: " << currentEnergy << endl;
+}
 
 /* Implementation Invariant:
   1. Minimal details describe internal data structures and dependencies

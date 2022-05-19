@@ -213,6 +213,7 @@ public:
     // POSTCONDITION: return false if flea is permanently deactivated (which is dead)
     bool isAlive();
 
+    void printInfo();
 
     const gridFlea operator=(const gridFlea& src);
 

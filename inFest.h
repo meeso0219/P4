@@ -65,6 +65,7 @@ private:
     // PRECONDITION: gridFlea must not died more than half
     // POSTCONDITION: return true if more than half died
     bool isMoreThanHalfDied();
+    uint AliveFleaCount;
 
 public:
 
@@ -80,6 +81,9 @@ public:
     inFest(inFest&& src);
 
     ~inFest();
+
+    uint getNumOfFlea();
+    uint getNumOfAliveFlea();
 
 
     // POSTCONDITION: subobject gridFleas move p squares
@@ -98,7 +102,7 @@ public:
 
     inFest &operator+=(const inFest &rhs);
 
-    inFest operator+(const gridFlea &rhs);
+    inFest operator+(gridFlea *rhs);
 
     inFest &operator+=(const gridFlea &rhs);
 
