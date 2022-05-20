@@ -1,6 +1,6 @@
 /*
  Author: Changhyun Park
- Date: 5/19/2022
+ Date: 5/20/2022
  Revision History: Added PRE/POST CONDITIONS and Invariants (4/4)
                    Added more about invariants (4/5)
                    Added Unit Testing (4/5)
@@ -155,7 +155,7 @@ private:
     int         currentEnergy;
     int         movedCount;
     bool        outSideJump; // false for not last jumped yet. true for last jumped
-    int         z; //
+    int         z;
 
     // POST CONDITION: flea's move count and position is set to initial which is (0,0)
     void        resetPosition();
@@ -193,6 +193,7 @@ public:
     // POSTCONDITION: if client does not specify the initial values, x is 0 y is 0 and energy is 10
     gridFlea();
 
+    // copy constructor
     gridFlea(const gridFlea* src);
 
     // POSTCONDITION: return value of the flea
@@ -213,30 +214,33 @@ public:
     // POSTCONDITION: return false if flea is permanently deactivated (which is dead)
     bool isAlive();
 
-    void printInfo();
+    gridFlea& operator=(const gridFlea& src);
 
-    const gridFlea operator=(const gridFlea& src);
 
     gridFlea operator+(const int &rhs) const; // just adding rhs.x to this.x, and rhs.y to this.y
     gridFlea &operator+=(const int &rhs);
-
-    gridFlea operator-(const int &rhs) const;
-
-    gridFlea &operator-=(const int &rhs);
+    gridFlea operator+(const gridFlea& g1);
+    gridFlea &operator+=(const gridFlea &rhs);
 
     gridFlea operator++(int);
     gridFlea& operator++();
 
-    gridFlea &operator+=(const gridFlea &rhs);
-
+    gridFlea operator-(const int &rhs) const;
+    gridFlea &operator-=(const int &rhs);
     gridFlea operator-(const gridFlea &rhs) const;
-
     gridFlea &operator-=(const gridFlea &rhs);
+
+    gridFlea operator--(int);
+    gridFlea& operator--();
+
+
 
 
     // 그냥 + 연산자는 새로운 객체 반환
     // += 연산자는 원래있던 객체에 값 더한거.
-    gridFlea operator+(const gridFlea& g1);
+
+
+    // comparison overloaded operators
     bool operator==(gridFlea &rhs); // these comparison operators really should be const, but i update the state upon calling `getState()` so that's not really possible for me.
 
     bool operator!=(gridFlea &rhs); // these compare `value()` of rhs and *this

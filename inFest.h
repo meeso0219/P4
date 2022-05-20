@@ -1,6 +1,6 @@
 /*
 * Author: Changhyun Park
-* Date: 5/19/2022
+* Date: 5/20/2022
 *
 * CLASS INVARIANT:
 *                 - The constructor encapsulates some number of internally generated, distinct gridFlea objects.
@@ -60,13 +60,13 @@ enum VALUE_TYPE
 class inFest {
 private:
     int         gridFleasSize;
-    gridFlea** gridFleas;
+    gridFlea**  gridFleas;
 
     // PRECONDITION: gridFlea must not died more than half
     // POSTCONDITION: return true if more than half died
     bool isMoreThanHalfDied();
-    uint AliveFleaCount;
-
+    int AliveFleaCount;
+    void copySem(const inFest& src);
 public:
 
     inFest();
@@ -74,16 +74,16 @@ public:
     // PRECONDITION: client must specify four parameters.
     // POSTCONDITION: infest object get some number of distinct gridFlea objects
     inFest(int initX, int initY, int initEnergy, int size);
-    const inFest& operator=(const inFest& src);
+    inFest& operator=(const inFest& src);
 
 
-    inFest& operator=(inFest &&src);
+    inFest& operator=(inFest &&src) noexcept ;
     inFest(inFest&& src);
 
     ~inFest();
 
-    uint getNumOfFlea();
-    uint getNumOfAliveFlea();
+    int getNumOfFlea();
+    int getNumOfAliveFlea();
 
 
     // POSTCONDITION: subobject gridFleas move p squares
@@ -104,9 +104,11 @@ public:
 
     inFest operator+(gridFlea *rhs);
 
-    inFest &operator+=(const gridFlea &rhs);
+    inFest &operator+=(const gridFlea &rhs); // TODO: 이거 해야함
 
-    bool operator==(inFest &rhs); // compares (maxValue - minValue) of both
+
+
+    bool operator==(inFest &rhs); // compares maxValue of inFest
 
     bool operator!=(inFest &rhs);
 

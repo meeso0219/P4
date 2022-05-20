@@ -1,13 +1,13 @@
 /*
 * Author: Changhyun Park
-* Date: 5/19/2022
+* Date: 5/20/2022
 * Revision History: Added PRE/POST CONDITIONS and Invariants (4/4)
 *                   Added more about invariants (4/5)
 *                   Added Unit Testing (4/5)
 *                   Changed public void functions to public bool to determine if it worked or not (4/5)
 *                   Created driver (4/5)
 *
-* Revision History2:
+* Revision History2 (P2):
 *                   Separated constructor into two constructor (4/11)
 *                   Changed bool to void for revive() and reset() (4/11)
 *                   Changed reset to have guard check if flea is permanently deactivated (4/11)
@@ -16,13 +16,20 @@
 *                   modified the directional logic of the flea. Removed rng (4/12)
 *                   Edited class invariant, interface invariant, and implementation invariant (4/13)
 *
+ * Revision History3 (P4):
+ *                  - Created move semantics
+ *                  - Corrected copy assignment and constructor
+ *                  - Any gridFlea may jump outside grid boundaries, at most once, and the jump cannot be
+ *                    more than z squares away from the boundary.
+ *
+ *
  CLASS INVARIANT:
- - The constructor places the flea as specified by the parameters. If the coordinate
+    - The constructor places the flea as specified by the parameters. If the coordinate
     is out of the grid, the flea is placed at (0, 0). The grid coordinates are described
     as from 0 to grid size. The flea is set to active initially.
-    The constructor sets flea's initial enery as specified by the parameter.
-    If the energy is lower than ENERGETIC_BASE_POINT, energy is set to DEFAULT_ENERGY.
-    If client do not specify any x,y position and energy, initial position is (0,0) and initial energy is DEFAULT_ENERGY
+    - The constructor sets flea's initial energy as specified by the parameter.
+    - If the energy is lower than ENERGETIC_BASE_POINT, energy is set to DEFAULT_ENERGY.
+    - If client do not specify any x,y position and energy, initial position is (0,0) and initial energy is DEFAULT_ENERGY
 */
 
 #include "gridFlea.h"
@@ -31,13 +38,10 @@
 // POSTCONDITION: set the flea's initial position and initial energy by parameters
 gridFlea::gridFlea(int initX, int initY, int initEnergy)
 {
-    //cout << "벼룩생성자" << endl;
     if (initX < 0 || initX > SIZE)
         initX = 0;
-
     if (initY < 0 || initY > SIZE)
         initY = 0;
-
     if (initEnergy < ENERGETIC_BASE_POINT)
         initEnergy = DEFAULT_ENERGY;
 
@@ -73,73 +77,16 @@ gridFlea::gridFlea(const gridFlea* src)
     movedCount = src->movedCount;
 }
 
-
-// POST CONDITION: flea's move count and position is set to initial which is (0,0)
-void gridFlea::resetPosition()
-{
-    movedCount = 0;
-    currentX = initialX;
-    currentY = initialY;
-}
-
-// POST CONDITION: flea's energy is set to its initial energy
-void gridFlea::resetEnergy()
-{
-    currentEnergy = initialEnergy;
-}
-
-// POSTCONDTION: return false if flea's position is out of the bound
-//               return true if flea is inside of the range
-bool gridFlea::IsVaildPosition()
-{
-    if (currentX < LOWERXBOUND || currentX > UPPERXBOUND ||
-        currentY < LOWERYBOUND || currentY > UPPERYBOUND)
-        return false;
-
-    return true;
-}
-
-bool gridFlea::checkFleaState(FLEA_STATUS state)
-{
-    return state & getFleaState();
-}
-
-// POSTCONDITION: return value that represent flea state
-int gridFlea::getFleaState()
-{
-    int state = STATE_NONE;
-
-    if (!IsVaildPosition())
-        state |= STATE_PERMDEACTIVE;
-
-    if (currentEnergy == 0)
-        state |= STATE_INACTIVE;
-
-    if (currentEnergy >= ENERGETIC_BASE_POINT)
-        state |= STATE_ENERGERTIC;
-    else
-        state |= STATE_NORMAL;
-
-
-    return (FLEA_STATUS)state;
-}
-
 // PRECONDITION:    Flea must be in active mode to move
 //                  Flea must not be in invalid position to move
 void gridFlea::move(int p)
 {
-
     if (checkFleaState((FLEA_STATUS)(STATE_PERMDEACTIVE | STATE_INACTIVE)))
     {
         if (!outSideJump)
-        {
             outSideJump = true;
-        }
         else
-        {
-            //cout << "not moved" << endl;
             return;
-        }
     }
 
     if (!checkFleaState(STATE_ENERGERTIC))
@@ -148,19 +95,12 @@ void gridFlea::move(int p)
     if (p > currentEnergy)
         p = currentEnergy;
 
-    //cout << "Move current p: " << p << endl;
-
     z = SIZE/2;
-    //cout << "z: " << z << endl;
-    if (outSideJump == true)
+
+    if (outSideJump)
     {
         if (p + currentX > SIZE + z || p + currentY > SIZE + z)
-        {
-            //cout << "gridFlea cannot jump more than " << z << "squares from boundary" << endl;
-            // cout << "current location is " << currentX << currentY << endl;
             return;
-        }
-
     }
     if (currentEnergy % 2 == 0)
         moveX(p);
@@ -169,34 +109,6 @@ void gridFlea::move(int p)
 
     currentEnergy -= p;
     movedCount += p;
-    //cout << "current Energy: " << currentEnergy << endl;
-
-}
-
-// POSTCONDITION: current x axis changes
-void gridFlea::moveX(int p)
-{
-    currentX += p;
-    // cout << "current X: " << currentX << endl;
-}
-
-// POSTCONDITION: current y axis changes
-void gridFlea::moveY(int p)
-{
-    currentY += p;
-    //cout << "current Y: " << currentY << endl;
-}
-
-//��reward�� is reduced by the number of squares moved.
-int gridFlea::reward()
-{
-    return MAX(DEFAULT_REWARD - movedCount, 1);
-}
-
-// POSTCONDITION: return calculated change value
-int gridFlea::change()
-{
-    return ABS((initialX - currentX)) + ABS((initialY - currentY));
 }
 
 // PRECONDITION: Flea must be not permanantely deactivated
@@ -227,8 +139,8 @@ bool gridFlea::isAlive()
     return !checkFleaState(STATE_PERMDEACTIVE);
 }
 
-
-const gridFlea gridFlea::operator=(const gridFlea& src)
+/*
+gridFlea & gridFlea::operator=(const gridFlea& src)
 {
 
     //cout << "deep copy" << endl;
@@ -244,7 +156,7 @@ const gridFlea gridFlea::operator=(const gridFlea& src)
 
     return *this;
 }
-
+*/
 
 // POSTCONDITION: return value of the flea
 int gridFlea::value()
@@ -254,86 +166,116 @@ int gridFlea::value()
 
 
 
-// + 연산은 객체두개 더한 새로운 객체 만들기
+// POSTCONDITION: return a  gridFlea which has the added value of current x, current y, and
+//                movedCount from  other two gridFlea.
 gridFlea gridFlea::operator+(const gridFlea& g1)
 {
     gridFlea local;
     local.currentX =  this->currentX + g1.currentX;
     local.currentY = this->currentY + g1.currentY;
-    local.currentEnergy =  this->currentEnergy + g1.currentEnergy;
+    local.movedCount =  this->movedCount + g1.movedCount;
 
     return local;
 }
 
-// += 연산은 원래있던 객체에 값 더한거 += is destructive so the object is changed
+// POSTCONDITION: The value of current x, current y, and movedCount of right side gridFlea
+//                will be added to the left side gridFlea.
 gridFlea&  gridFlea::operator+=(const gridFlea &rhs)
 {
     currentX += rhs.currentX;
     currentY += rhs.currentY;
-    currentEnergy += rhs.currentEnergy;
+    movedCount += rhs.movedCount;
 
     return *this;
 }
 
+// PRECONDITION: The right side gridFlea may not have larger value of movedCount than left side gridFlea.
+// POSTCONDITION: return a  gridFlea which has the subtracted value of current x, current y, and
+//                movedCount from  other two gridFlea.
 gridFlea gridFlea::operator-(const gridFlea& rhs) const
 {
     gridFlea local;
     local.currentX =  this->currentX - rhs.currentX;
     local.currentY =  this->currentY- rhs.currentY;
-    local.currentEnergy = this->currentEnergy - rhs.currentEnergy;
-    if (local.currentEnergy < 0)
-        local.currentEnergy = 0;
+    local.movedCount = this->movedCount - rhs.movedCount;
 
     return local;
 }
 
+// PRECONDITION: The right side gridFlea may not have larger value of movedCount than left side gridFlea.
+// POSTCONDITION: The value of current x, current y, and movedCount of right side gridFlea
+//                will be subtracted to the left side gridFlea.
 gridFlea&  gridFlea::operator-=(const gridFlea &rhs)
 {
     currentX -= rhs.currentX;
     currentY -= rhs.currentY;
-    currentEnergy -= rhs.currentEnergy;
+    movedCount -= rhs.movedCount;
 
     return *this;
 }
 
+// POSTCONDITION: return a  gridFlea which has the added value of current x, current y, and
+//                movedCount by value of rhs.
 gridFlea gridFlea::operator+(const int &rhs) const
 {
     gridFlea local;
     local.currentX += rhs;
     local.currentY += rhs;
-    local.currentEnergy += rhs;
+    local.movedCount += rhs;
 
     return local;
 }
 
-// prefix
+// POSTCONDITION: The returned gridFlea's currentX, currentY, and movedCount will be increment by 1.
 gridFlea& gridFlea::operator++()
 {
     currentX += 1;
     currentY += 1;
-    currentEnergy += 1;
+    movedCount += 1;
 
     return *this;
 }
 
-// postfix
-gridFlea gridFlea::operator++(int)
+// TODO: not working
+// POSTCONDITION: returned value is not changed. (post fix)
+gridFlea gridFlea::operator++(int x)
 {
-    gridFlea local(currentX,currentY,currentEnergy);
+    gridFlea oldState = *this;
     currentX += 1;
     currentY += 1;
-    currentEnergy += 1;
+    movedCount += 1;
 
-    return local;
+    return oldState;
 }
 
+// PRECONDITION: The gridFlea's movedCount may not zero.
+// POSTCONDITION: The returned gridFlea's currentX, currentY, and movedCount will be decremented by 1.
+gridFlea& gridFlea::operator--()
+{
+    currentX -= 1;
+    currentY -= 1;
+    movedCount -= 1;
 
+    return *this;
+}
+
+// TODO: not working
+// POSTCONDITION: returned value is not changed. (post fix)
+gridFlea gridFlea::operator--(int)
+{
+    gridFlea oldState = *this;
+    currentX -= 1;
+    currentY -= 1;
+    movedCount -= 1;
+
+    return oldState;
+}
 
 gridFlea& gridFlea::operator+=(const int &rhs)
 {
     currentX += rhs;
     currentY += rhs;
-    currentEnergy += rhs;
+    movedCount += rhs;
 
     return *this;
 }
@@ -343,9 +285,7 @@ gridFlea gridFlea::operator-(const int &rhs) const
     gridFlea local;
     local.currentX -= rhs;
     local.currentY -= rhs;
-    local.currentEnergy -= rhs;
-    if (local.currentEnergy < 0)
-        local.currentEnergy = 0;
+    local.movedCount -= rhs;
 
     return local;
 }
@@ -354,9 +294,7 @@ gridFlea& gridFlea::operator-=(const int &rhs)
 {
     currentX -= rhs;
     currentY -= rhs;
-    currentEnergy -= rhs;
-    if (currentEnergy < 0)
-        currentEnergy = 0;
+    movedCount -= rhs;
 
     return *this;
 }
@@ -409,11 +347,82 @@ bool gridFlea::operator>=(gridFlea &rhs)
         return false;
 }
 
-void gridFlea::printInfo()
+// POST CONDITION: flea's move count and position is set to initial which is (0,0)
+void gridFlea::resetPosition()
 {
-    cout << "current x: " << currentX << "  current y: " << currentY
-    << "  current Energy: " << currentEnergy << endl;
+    movedCount = 0;
+    currentX = initialX;
+    currentY = initialY;
 }
+
+// POST CONDITION: flea's energy is set to its initial energy
+void gridFlea::resetEnergy()
+{
+    currentEnergy = initialEnergy;
+}
+
+// POSTCONDTION: return false if flea's position is out of the bound
+//               return true if flea is inside of the range
+bool gridFlea::IsVaildPosition()
+{
+    if (currentX < LOWERXBOUND || currentX > UPPERXBOUND ||
+        currentY < LOWERYBOUND || currentY > UPPERYBOUND)
+        return false;
+
+    return true;
+}
+
+bool gridFlea::checkFleaState(FLEA_STATUS state)
+{
+    return state & getFleaState();
+}
+
+// POSTCONDITION: return value that represent flea state
+int gridFlea::getFleaState()
+{
+    int state = STATE_NONE;
+
+    if (!IsVaildPosition())
+        state |= STATE_PERMDEACTIVE;
+
+    if (currentEnergy == 0)
+        state |= STATE_INACTIVE;
+
+    if (currentEnergy >= ENERGETIC_BASE_POINT)
+        state |= STATE_ENERGERTIC;
+    else
+        state |= STATE_NORMAL;
+
+
+    return (FLEA_STATUS)state;
+}
+
+
+// POSTCONDITION: current x axis changes
+void gridFlea::moveX(int p)
+{
+    currentX += p;
+}
+
+// POSTCONDITION: current y axis changes
+void gridFlea::moveY(int p)
+{
+    currentY += p;
+}
+
+//��reward�� is reduced by the number of squares moved.
+int gridFlea::reward()
+{
+    return MAX(DEFAULT_REWARD - movedCount, 1);
+}
+
+// POSTCONDITION: return calculated change value
+int gridFlea::change()
+{
+    return ABS((initialX - currentX)) + ABS((initialY - currentY));
+}
+
+
 
 /* Implementation Invariant:
   1. Minimal details describe internal data structures and dependencies
